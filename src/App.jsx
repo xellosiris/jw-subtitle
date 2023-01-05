@@ -11,13 +11,15 @@ import {
 import axios from "axios";
 import { vttToPlainText } from "vtt-to-text";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
-import ContentPasteIcon from "@mui/icons-material/ContentPaste";
+import DeleteIcon from "@mui/icons-material/Delete";
+
 function App() {
   const [url, setURL] = useState("");
   const [subtitle, setSubtitle] = useState("");
   const [open, setOpen] = useState(false);
-  const paste = async () => {
-    setURL(await navigator.clipboard.readText());
+  const clear = () => {
+    setURL("");
+    setSubtitle("");
   };
   const copy = async () => {
     await navigator.clipboard.writeText(subtitle);
@@ -27,8 +29,7 @@ function App() {
   };
 
   const close = () => {
-    setURL("");
-    setSubtitle("");
+    clear();
     setOpen(false);
   };
 
@@ -53,8 +54,8 @@ function App() {
       <Fab color='primary' className='fixed right-3 bottom-3' onClick={copy}>
         <ContentCopyIcon />
       </Fab>
-      <Fab color='warning' className='fixed right-3 bottom-20' onClick={paste}>
-        <ContentPasteIcon />
+      <Fab color='warning' className='fixed right-3 bottom-20' onClick={clear}>
+        <DeleteIcon />
       </Fab>
       <Dialog open={open} onClose={close}>
         <DialogTitle>錯誤</DialogTitle>

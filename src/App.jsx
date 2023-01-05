@@ -73,9 +73,10 @@ function App() {
         </div>
         <TextField
           label='Subtitle'
-          className='h-screen overflow-auto mt-7'
+          className='h-screen mt-7'
           value={subtitle}
           minRows={10}
+          maxRows={30}
           multiline
           InputProps={{
             readOnly: true,

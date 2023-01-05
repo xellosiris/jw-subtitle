@@ -9,9 +9,9 @@ import {
   TextField,
 } from "@mui/material";
 import axios from "axios";
-import { vttToPlainText } from "vtt-to-text";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { parse } from "node-webvtt";
 
 function App() {
   const [url, setURL] = useState("");
@@ -42,8 +42,9 @@ function App() {
       const payload = await axios.get(itemInfoUrl);
       const subtitleURL = payload.data.media[0].files[0].subtitles.url;
       axios.get(subtitleURL).then((res) => {
-        const sub = vttToPlainText(res.data);
-        setSubtitle(sub.replaceAll(" ", "\n"));
+        const subtitles = parse(res.data);
+        const subs = subtitles.cues.map((s) => s.text);
+        setSubtitle(subs.join("\n"));
       });
     } catch {
       setOpen(true);

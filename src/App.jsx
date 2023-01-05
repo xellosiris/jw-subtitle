@@ -81,6 +81,7 @@ function App() {
             readOnly: true,
           }}
         />
+        <p className='text-gray-300'>xellosiris@gmail.com</p>
       </div>
     </Fragment>
   );

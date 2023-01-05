@@ -61,12 +61,30 @@ function App() {
       <Dialog open={open} onClose={close}>
         <DialogTitle>錯誤</DialogTitle>
         <DialogContent>
-          <DialogContentText>您張貼的網址錯誤，或是該影片不提供字幕</DialogContentText>
+          <DialogContentText>
+            The link you pasted is wrong or subtitle is not existed
+          </DialogContentText>
         </DialogContent>
       </Dialog>
+
       <div className='flex flex-col p-5'>
+        <h1 className='text-3xl my-3'>JW Subtitle Extract</h1>
+        <div className='my-3'>
+          <p className='font-semibold'>Instruction</p>
+          <p>
+            Please copy the share link of video ,{" "}
+            <span className='text-red-600'>DO NOT COPY URL FROM BROWSER</span> , from JW Library or
+            JW.org then paste it below.
+          </p>
+        </div>
         <div className='flex space-x-2'>
-          <TextField className='flex-auto' label='Video URL' value={url} onChange={change} />
+          <TextField
+            className='flex-auto'
+            label='Video Share Link'
+            placeholder='paste your share link here'
+            value={url}
+            onChange={change}
+          />
           <Button variant='contained' onClick={submit}>
             送出
           </Button>
@@ -82,7 +100,7 @@ function App() {
             readOnly: true,
           }}
         />
-        <p className='text-gray-300'>xellosiris@gmail.com</p>
+        <p className='text-gray-500'>contact:xellosiris@gmail.com</p>
       </div>
     </Fragment>
   );

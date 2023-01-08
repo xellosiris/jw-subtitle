@@ -1,4 +1,5 @@
-import { Fragment, useState } from "react";
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import DeleteIcon from "@mui/icons-material/Delete";
 import {
   Button,
   Dialog,
@@ -9,9 +10,8 @@ import {
   TextField,
 } from "@mui/material";
 import axios from "axios";
-import ContentCopyIcon from "@mui/icons-material/ContentCopy";
-import DeleteIcon from "@mui/icons-material/Delete";
 import { parse } from "node-webvtt";
+import { Fragment, useState } from "react";
 
 function App() {
   const [url, setURL] = useState("");
@@ -66,8 +66,7 @@ function App() {
           </DialogContentText>
         </DialogContent>
       </Dialog>
-
-      <div className='flex flex-col p-5'>
+      <div className='flex flex-col h-screen p-5'>
         <h1 className='text-3xl my-3'>JW Subtitle Extract</h1>
         <div className='my-3'>
           <p className='font-semibold'>Instruction</p>
@@ -91,13 +90,16 @@ function App() {
         </div>
         <TextField
           label='Subtitle'
-          className='h-screen mt-7'
+          classes={{ root: "h-full mt-7" }}
           value={subtitle}
-          minRows={10}
-          maxRows={30}
           multiline
           InputProps={{
             readOnly: true,
+            classes: { root: "h-full", input: "h-full overflow-y-auto" },
+            // style: {
+            //   height: "100%",
+            //   overflow: "auto",
+            // },
           }}
         />
         <p className='text-gray-500'>contact:xellosiris@gmail.com</p>

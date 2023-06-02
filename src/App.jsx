@@ -17,6 +17,7 @@ function App() {
   const [url, setURL] = useState("");
   const [subtitle, setSubtitle] = useState("");
   const [open, setOpen] = useState(false);
+
   const clear = () => {
     setURL("");
     setSubtitle("");
@@ -34,19 +35,19 @@ function App() {
   };
 
   const submit = async () => {
-    const urlParams = new URLSearchParams(url);
+    const urlParams = new URL(url).searchParams;
     const lang = urlParams.get("wtlocale");
     const lank = urlParams.get("lank");
     const itemInfoUrl = `https://b.jw-cdn.org/apis/mediator/v1/media-items/${lang}/${lank}`;
     try {
       const payload = await axios.get(itemInfoUrl);
       const subtitleURL = payload.data.media[0].files[0].subtitles.url;
-      axios.get(subtitleURL).then((res) => {
-        const subtitles = parse(res.data);
-        const subs = subtitles.cues.map((s) => s.text);
-        setSubtitle(subs.join("\n"));
-      });
-    } catch {
+      const res = await axios.get(subtitleURL);
+      const subtitles = parse(res.data);
+      const subs = subtitles.cues.map((s) => s.text);
+      setSubtitle(subs.join("\n"));
+    } catch (e) {
+      console.log(e);
       setOpen(true);
     }
   };

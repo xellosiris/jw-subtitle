@@ -41,12 +41,12 @@ export function Subtitle() {
     }
   };
   return (
-    <div className="flex flex-col h-screen max-w-2xl p-3 mx-auto space-y-3 text-sm text-foreground">
+    <div className="flex flex-col h-screen max-w-2xl p-3 mx-auto space-y-3">
       <h1 className="text-2xl">JW Subtitle Extract</h1>
       <div>
         <Label>使用方式</Label>
-        <div className="text-muted-foreground">
-          請複製影片的分享連結並貼在下方欄位，
+        <div className="text-sm text-muted-foreground">
+          請從JW Library複製影片的分享連結並張貼在下方欄位，
           <span className="text-destructive">請不要從瀏覽器複製網址</span>
         </div>
       </div>
@@ -69,20 +69,18 @@ export function Subtitle() {
           清除
         </Button>
       </div>
-      {!!title && (
-        <div className="flex flex-col gap-1.5">
-          <Label>影片名稱</Label>
-          <p>{title}</p>
-        </div>
-      )}
+      <Label>影片名稱：{title ? title : "未輸入..."}</Label>
       <div className="h-full flex flex-col gap-1.5">
         <Label>字幕內容</Label>
-        <Textarea value={subtitle} className="h-full" />
+        <Textarea value={subtitle} className="h-full text-foreground" />
       </div>
-      <div className="flex items-center space-x-3 text-sm text-muted-foreground">
+      <a
+        href="mailto:xellosiris@gmail.com"
+        className="flex items-center space-x-3 text-sm text-muted-foreground"
+      >
         <Send size={16} />
         <span>xellosiris@gmail.com</span>
-      </div>
+      </a>
     </div>
   );
 }

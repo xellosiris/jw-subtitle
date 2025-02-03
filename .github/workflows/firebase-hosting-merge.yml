@@ -10,8 +10,12 @@ jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
     steps:
+      - uses: oven-sh/setup-bun@v2 # Setup bun
+        with:
+          bun-version: latest # You can also use a specific version
       - uses: actions/checkout@v3
-      - run: npm install && npm run build
+      - run: bun install
+      - run: bun run build
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: "${{ secrets.GITHUB_TOKEN }}"

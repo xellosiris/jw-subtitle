@@ -47,7 +47,7 @@ export function Subtitle() {
         <Label>使用方式</Label>
         <div className="text-muted-foreground">
           請複製影片的分享連結並貼在下方欄位，
-          <span className="text-destructive">請不要從瀏覽器網址複製</span>
+          <span className="text-destructive">請不要從瀏覽器複製網址</span>
         </div>
       </div>
       <div className="flex gap-2">

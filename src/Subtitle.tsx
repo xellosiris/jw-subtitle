@@ -18,6 +18,9 @@ export function Subtitle() {
   const change = (event: React.ChangeEvent<HTMLInputElement>) => {
     setURL(event.target.value);
   };
+  const onSubtitleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setSubtitle(event.target.value);
+  };
 
   const submit = async () => {
     try {
@@ -51,12 +54,7 @@ export function Subtitle() {
         </div>
       </div>
       <div className="flex gap-2">
-        <Input
-          className="w-full"
-          placeholder="請把影片連結貼在這裡"
-          value={url}
-          onChange={change}
-        />
+        <Input className="w-full" placeholder="請把影片連結貼在這裡" value={url} onChange={change} />
         <Button onClick={submit}>送出</Button>
         <Button
           variant={"destructive"}
@@ -72,12 +70,9 @@ export function Subtitle() {
       <Label>影片名稱：{title ? title : "未輸入..."}</Label>
       <div className="h-full flex flex-col gap-1.5">
         <Label>字幕內容</Label>
-        <Textarea value={subtitle} className="h-full text-foreground" />
+        <Textarea value={subtitle} onChange={onSubtitleChange} className="h-full text-foreground" />
       </div>
-      <a
-        href="mailto:xellosiris@gmail.com"
-        className="flex items-center space-x-3 text-sm text-muted-foreground"
-      >
+      <a href="mailto:xellosiris@gmail.com" className="flex items-center space-x-3 text-sm text-muted-foreground">
         <Send size={16} />
         <span>xellosiris@gmail.com</span>
       </a>

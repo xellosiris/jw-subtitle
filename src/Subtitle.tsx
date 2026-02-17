@@ -26,15 +26,73 @@ export function Subtitle() {
     try {
       const urlParams = new URL(url).searchParams;
       const lang = urlParams.get("wtlocale");
+      const docid = urlParams.get("docid");
       const lank = urlParams.get("lank");
-      const itemInfoUrl = `https://b.jw-cdn.org/apis/mediator/v1/media-items/${lang}/${lank}`;
-      const payload = await axios.get(itemInfoUrl);
-      const subtitleURL = payload.data.media[0].files[0].subtitles.url;
+      if (!lang || (!docid && !lank)) {
+        throw new Error("invalid query params");
+      }
+
+      const requestCandidates: Array<() => Promise<{ subtitleURL: string; videoTitle?: string }>> = [];
+
+      if (docid) {
+        requestCandidates.push(async () => {
+          const pubMediaUrl = `https://b.jw-cdn.org/apis/pub-media/GETPUBMEDIALINKS?docid=${encodeURIComponent(docid)}&output=json&fileformat=m4v%2Cmp4%2C3gp%2Cmp3&alllangs=1&track=1&langwritten=${encodeURIComponent(lang)}&txtCMSLang=${encodeURIComponent(lang)}`;
+          const payload = await axios.get(pubMediaUrl);
+          const filesByLanguage = payload.data?.files?.[lang];
+          const mediaItem = filesByLanguage.MP4[0];
+          const subtitleURL = mediaItem?.subtitles?.url;
+
+          if (!subtitleURL) {
+            throw new Error("pub-media no subtitle");
+          }
+
+          return {
+            subtitleURL,
+            videoTitle: mediaItem?.title,
+          };
+        });
+      }
+
+      if (lank) {
+        requestCandidates.push(async () => {
+          const itemInfoUrl = `https://b.jw-cdn.org/apis/mediator/v1/media-items/${encodeURIComponent(lang)}/${encodeURIComponent(lank)}`;
+          const payload = await axios.get(itemInfoUrl);
+          const subtitleURL = payload.data?.media?.[0]?.files?.[0]?.subtitles?.url;
+          if (!subtitleURL) {
+            throw new Error("mediator no subtitle");
+          }
+
+          return {
+            subtitleURL,
+            videoTitle: payload.data?.media?.[0]?.title,
+          };
+        });
+      }
+
+      let subtitleURL = "";
+      let videoTitle: string | undefined;
+      let lastError: unknown;
+
+      for (const requestCandidate of requestCandidates) {
+        try {
+          const result = await requestCandidate();
+          subtitleURL = result.subtitleURL;
+          videoTitle = result.videoTitle;
+          break;
+        } catch (error) {
+          lastError = error;
+        }
+      }
+
+      if (!subtitleURL) {
+        throw lastError ?? new Error("all api failed");
+      }
+
       const res = await axios.get(subtitleURL);
       const subtitles = parser.parse(res.data, "subtitles");
       const subs = subtitles.cues.map((s) => s.text);
       setSubtitle(subs.join("\n"));
-      setTitle(payload.data.media[0].title);
+      setTitle(videoTitle);
     } catch (e) {
       toast({
         title: "錯誤",
